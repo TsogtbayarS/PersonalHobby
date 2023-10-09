@@ -1,0 +1,247 @@
+[{
+	"_id": {
+		"$oid": "6521c3dd8bf2896f24a78e75"
+	},
+	"name": "Vincent van GogH",
+	"country": "Netherlands",
+	"paintings": [
+		{
+			"name": "Starry Night",
+			"year": 1889,
+			"_id": {
+				"$oid": "65234916e3bb3b1007bcb883"
+			}
+		},
+		{
+			"name": "Sunflower",
+			"year": 1888,
+			"_id": {
+				"$oid": "65234916e3bb3b1007bcb884"
+			}
+		}
+	],
+	"__v": 2
+},
+{
+	"_id": {
+		"$oid": "6521e2dd2ef58b85854964d6"
+	},
+	"name": "Edvard Munch",
+	"country": "Norway",
+	"paintings": [
+		{
+			"name": "The Scream",
+			"year": 1893,
+			"_id": {
+				"$oid": "6521e2dd2ef58b85854964d7"
+			}
+		},
+		{
+			"name": "The Madonna",
+			"year": 1894,
+			"_id": {
+				"$oid": "6521e2dd2ef58b85854964d8"
+			}
+		}
+	],
+	"__v": 0
+},
+{
+	"_id": {
+		"$oid": "65231673ba54b2e7002a8f8f"
+	},
+	"name": "Test",
+	"year": 2023,
+	"paintings": [
+		{
+			"name": "NoName",
+			"year": 0,
+			"_id": {
+				"$oid": "652318247e71bd668f94a208"
+			}
+		},
+		{
+			"name": "NoName",
+			"year": 0,
+			"_id": {
+				"$oid": "65231a442cabb59fd57ab557"
+			}
+		},
+		{
+			"name": "The Kiss2",
+			"year": 19072,
+			"_id": {
+				"$oid": "65231b4b8f1a2e01fa271613"
+			}
+		},
+		{
+			"name": "The Kiss2",
+			"year": 19072,
+			"_id": {
+				"$oid": "65231b66c681d0b9bd0c3014"
+			}
+		}
+	]
+},
+{
+	"_id": {
+		"$oid": "65234f8f93c4bb6a9c5bfc75"
+	},
+	"name": "Gustav Klimt",
+	"country": "Austria",
+	"paintings": [
+		{
+			"name": "The Kiss",
+			"year": 1907,
+			"_id": {
+				"$oid": "65234fa893c4bb6a9c5bfc79"
+			}
+		}
+	],
+	"__v": 0
+},
+{
+	"_id": {
+		"$oid": "65234fc493c4bb6a9c5bfc7b"
+	},
+	"name": "Leonardo da Vinci",
+	"country": "Italy",
+	"paintings": [
+		{
+			"name": "Mona Lisa",
+			"year": 1503,
+			"_id": {
+				"$oid": "65234fe693c4bb6a9c5bfc7e"
+			}
+		},
+		{
+			"name": "The Last Supper",
+			"year": 1495,
+			"_id": {
+				"$oid": "6523505293c4bb6a9c5bfc83"
+			}
+		}
+	],
+	"__v": 0
+},
+{
+	"_id": {
+		"$oid": "6523507f93c4bb6a9c5bfc85"
+	},
+	"name": "Pablo Picasso",
+	"country": "Spain",
+	"paintings": [
+		{
+			"name": "Guernica",
+			"year": 1937,
+			"_id": {
+				"$oid": "6523509093c4bb6a9c5bfc88"
+			}
+		},
+		{
+			"name": "Les Demoiselles d'Avignon",
+			"year": 1907,
+			"_id": {
+				"$oid": "6523509893c4bb6a9c5bfc8b"
+			}
+		}
+	],
+	"__v": 0
+},
+{
+	"_id": {
+		"$oid": "652350b593c4bb6a9c5bfc8d"
+	},
+	"name": "Claude Monet",
+	"country": "France",
+	"paintings": [
+		{
+			"name": "Water Lilies",
+			"year": 1919,
+			"_id": {
+				"$oid": "652350c293c4bb6a9c5bfc90"
+			}
+		},
+		{
+			"name": "Impression, Sunrise",
+			"year": 1872,
+			"_id": {
+				"$oid": "652350c493c4bb6a9c5bfc93"
+			}
+		}
+	],
+	"__v": 0
+},
+{
+	"_id": {
+		"$oid": "652350dc93c4bb6a9c5bfc95"
+	},
+	"name": "Frida Kahlo",
+	"country": "Mexico",
+	"paintings": [
+		{
+			"name": "Self-Portrait with Thorn Necklace and Hummingbird",
+			"year": 1940,
+			"_id": {
+				"$oid": "652350ed93c4bb6a9c5bfc98"
+			}
+		},
+		{
+			"name": "The Two Fridas",
+			"year": 1931,
+			"_id": {
+				"$oid": "652350f193c4bb6a9c5bfc9b"
+			}
+		}
+	],
+	"__v": 0
+},
+{
+	"_id": {
+		"$oid": "6523510b93c4bb6a9c5bfc9d"
+	},
+	"name": "Salvador Dalí",
+	"country": "Spain",
+	"paintings": [
+		{
+			"name": "The Persistence of Memory",
+			"year": 1931,
+			"_id": {
+				"$oid": "6523511c93c4bb6a9c5bfca0"
+			}
+		},
+		{
+			"name": "Swans Reflecting Elephants",
+			"year": 1937,
+			"_id": {
+				"$oid": "6523511f93c4bb6a9c5bfca3"
+			}
+		}
+	],
+	"__v": 0
+},
+{
+	"_id": {
+		"$oid": "6523514093c4bb6a9c5bfca5"
+	},
+	"name": "Michelangelo",
+	"country": "Italy",
+	"paintings": [
+		{
+			"name": "The Creation of Adam",
+			"year": 1511,
+			"_id": {
+				"$oid": "6523514e93c4bb6a9c5bfca8"
+			}
+		},
+		{
+			"name": "David",
+			"year": 1504,
+			"_id": {
+				"$oid": "6523515293c4bb6a9c5bfcab"
+			}
+		}
+	],
+	"__v": 0
+}]
+
