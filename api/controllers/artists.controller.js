@@ -1,5 +1,4 @@
 require("dotenv").config();
-const callbackify = require('util').callbackify;
 const mongoose = require("mongoose");
 require("../data/artists-model");
 const Artist = mongoose.model(process.env.ARTIST_MODEL);
@@ -63,7 +62,7 @@ module.exports.artistsGetOne = function (req, res) {
             response.message = err;
         })
         .finally(() => {
-            res.status(response.status).json(response)
+            res.status(response.status).json(response.message)
         });
 
 }
@@ -158,7 +157,7 @@ module.exports.artistsFullyUpdateOne = function (req, res) {
             console.log(process.env.ARTIST_ID_NOTFOUND_MESSAGE);
             response.status = parseInt(process.env.HTTP_STATUS_NOT_FOUND);
             response.message = process.env.ARTIST_ID_NOTFOUND_MESSAGE;
-            res.status(response.status).json(response);
+            res.status(response.status).json(response.message);
         }
         else {
             _UpdateArtistOne(req, res, artist, response, (artistNew, updatedArtist) => _artistFillFully(artistNew, updatedArtist));
@@ -168,7 +167,7 @@ module.exports.artistsFullyUpdateOne = function (req, res) {
             console.log(process.env.ERROR_MESSAGE_ARTIST);
             response.status = parseInt(process.env.HTTP_STATUS_INTERNAL_SERVER_ERROR);
             response.message = err;
-            res.status(response.status).json(response);
+            res.status(response.status).json(response.message);
         });
 }
 module.exports.artistsDeleteOne = function (req, res) {

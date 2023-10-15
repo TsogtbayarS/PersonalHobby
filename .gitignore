@@ -1,3 +1,6 @@
 .env
 /node_modules
 package-lock.json
+/public/angular-app/.vscode
+/public/angular-app/.angular
+/public/angular-app/node_modules

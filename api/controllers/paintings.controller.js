@@ -1,5 +1,4 @@
 require("dotenv").config();
-const callbackify = require('util').callbackify;
 require("../data/artists-model");
 const mongoose = require("mongoose");
 const Artist = mongoose.model('Artist');

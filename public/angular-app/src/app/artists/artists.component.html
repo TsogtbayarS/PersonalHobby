@@ -1,0 +1,7 @@
+<ul class="artist-list">
+  <li *ngFor="let artist of artists">
+    <a routerLink="/artists/{{ artist._id }}" class="artist-link">
+      {{ artist.name }}
+    </a>
+  </li>
+</ul>

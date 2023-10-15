@@ -1,0 +1,18 @@
+.artist-list {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .artist-list li {
+    margin-bottom: 10px;
+  }
+  
+  .artist-link {
+    text-decoration: none;
+    color: #3498db;
+  }
+  
+  .artist-link:hover {
+    text-decoration: underline;
+  }
+  
