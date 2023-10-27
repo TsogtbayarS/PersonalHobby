@@ -1,0 +1,19 @@
+<div *ngIf="!isLoggedIn" class="login-container">
+  <p *ngIf="loginFailed">{{failedMessage}}</p>
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+    <div class="form-group">
+      <label for="username">Username: </label>
+      <input type="text" name="username" formControlName="username" class="form-control" />
+    </div>
+    <br />
+    <div class="form-group">
+      <label for="password">Password: </label>
+      <input type="password" name="password" formControlName="password" class="form-control" />
+    </div>
+    <br />
+    <button type="submit" class="login-button">Login</button>
+  </form>
+</div>
+<div *ngIf="isLoggedIn" class="welcome-container">
+  Welcome {{ name }} &nbsp; <button (click)="onLogout()" class="logout-button">Logout</button>
+</div>

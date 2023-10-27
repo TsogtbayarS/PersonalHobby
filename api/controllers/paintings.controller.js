@@ -2,20 +2,53 @@ require("dotenv").config();
 require("../data/artists-model");
 const mongoose = require("mongoose");
 const Artist = mongoose.model('Artist');
+
 const _responseMessage = process.env.HTTP_RESPONSE_MESSAGE;
 const _parseFloatRadix = parseInt(process.env.PARSE_FLOAT_RADIX);
 const _parseIntRadix = parseInt(process.env.PARSE_FLOAT_RADIX);
 
-const getAllPaintings = function (req, res) {
-    let offset = parseFloat(process.env.DEFAULT_FIND_OFFSET, [_parseFloatRadix]);
-    let count = parseFloat(process.env.DEFAULT_FIND_COUNT, [_parseFloatRadix]);
-    const maxCount = parseInt(process.env.DEFAULT_MAX_FIND_LIMIT, [_parseIntRadix]);
+const _createResponse = function () {
+    return {
+        status: parseInt(process.env.HTTP_STATUS_OK),
+        message: []
+    }
+}
+
+const _setResponse = function (response, status, message) {
+    response.status = status;
+    response.message = message;
+}
+
+const _checkOffset = function (req) {
     if (req.query && req.query.offset) {
-        offset = parseInt(req.query.offset, [_parseIntRadix]);
+        return parseInt(req.query.offset, [_parseIntRadix]);
     }
+    else {
+        return parseInt(process.env.DEFAULT_FIND_OFFSET, _parseIntRadix)
+    }
+}
+const _checkCount = function (req) {
     if (req.query && req.query.count) {
-        count = parseInt(req.query.count, [_parseIntRadix]);
+        return parseInt(req.query.count, [_parseIntRadix]);
     }
+    else {
+        return parseInt(process.env.DEFAULT_FIND_COUNT, _parseIntRadix)
+    }
+}
+const _checkArtistExists = function (artist) {
+    return new Promise((resolve, reject) => {
+        if (!artist) {
+            reject();
+        }
+        else {
+            resolve();
+        }
+    });
+}
+const getAllPaintings = function (req, res) {
+    let offset = _checkOffset(req);
+    let count = _checkCount(req);
+    const maxCount = parseInt(process.env.DEFAULT_MAX_FIND_LIMIT, [_parseIntRadix]);
     if (isNaN(offset) || isNaN(count)) {
         res.status(parseInt(process.env.HTTP_STATUS_BAD_REQUEST)).json({ [_responseMessage]: process.env.VALIDATION_OFFSET_COUNT_TYPE });
         return;
@@ -25,109 +58,68 @@ const getAllPaintings = function (req, res) {
         return;
     }
     const artistId = req.params.artistId;
-    const response = {
-        status: parseInt(process.env.HTTP_STATUS_OK),
-        message: process.env.RESPONSE_MESSAGE_DEFAULT
-    };
-    Artist.findById(artistId).select(process.env.SUB_DOCUMENT_NAME).exec().then((Artist) => {
-        if (!Artist) {
-            console.log(process.env.ARTIST_ID_NOTFOUND_MESSAGE);
-            response.status = parseInt(process.env.HTTP_STATUS_NOT_FOUND);
-            response.message = process.env.ARTIST_ID_NOTFOUND_MESSAGE;
-        }
-        else if (Artist.paintings.length === 0) {
-            console.log(process.env.PAINTINGS_NOT_FOUND);
-            response.status = parseInt(process.env.HTTP_STATUS_NOT_FOUND);
-            response.message = process.env.PAINTINGS_NOT_FOUND;
-        }
-        else {
-            response.message = Artist.paintings;
-        }
-    })
-        .catch((err) => {
-
-            console.log(process.env.ERROR_MESSAGE_PAINTINGS);
-            response.status = parseInt(process.env.HTTP_STATUS_INTERNAL_SERVER_ERROR);
-            response.message = err;
-        })
-        .finally(() => {
-
-            res.status(response.status).json(response.message);
-        });
+    const response = _createResponse();
+    Artist.findById(artistId).select(process.env.SUB_DOCUMENT_NAME).exec()
+        .then((Artist) => _checkArtistExists(Artist)
+            .then(() => _setResponse(response, parseInt(process.env.HTTP_STATUS_OK), Artist.paintings))
+            .catch(() => _setResponse(response, parseInt(process.env.HTTP_STATUS_NOT_FOUND), { "message": process.env.PAINTINGS_NOT_FOUND })
+            ))
+        .catch((err) => _setResponse(response, parseInt(process.env.HTTP_STATUS_INTERNAL_SERVER_ERROR), { "message": err }))
+        .finally(() => res.status(response.status).json(response.message));
 }
 
 const getOnePainting = function (req, res) {
     const artistId = req.params.artistId;
     const paintingId = req.params.paintingId;
-    const response = {
-        status: parseInt(process.env.HTTP_STATUS_OK),
-        message: []
-    };
+    const response = _createResponse();
 
-    Artist.findById(artistId).select(process.env.SUB_DOCUMENT_NAME).exec().then((Artist) => {
-        if (!Artist) {
-            console.log(process.env.ARTIST_ID_NOTFOUND_MESSAGE);
-            response.status = parseInt(process.env.HTTP_STATUS_NOT_FOUND);
-            response.message = process.env.ARTIST_ID_NOTFOUND_MESSAGE;
-        }
-        else if (!Artist.paintings.id(paintingId)) {
-            console.log(process.env.PAINTING_ID_NOTFOUND_MESSAGE);
-            response.status = parseInt(process.env.HTTP_STATUS_NOT_FOUND);
-            response.message = process.env.PAINTING_ID_NOTFOUND_MESSAGE;
-        }
-        else {
-            response.message = Artist.paintings.id(paintingId);
-        }
-    })
-        .catch((err) => {
-            console.log(process.env.ERROR_MESSAGE_PAINTING);
-            response.status = parseInt(process.env.HTTP_STATUS_INTERNAL_SERVER_ERROR);
-            response.message = err;
-        })
-        .finally(() => {
-            res.status(response.status).json(response.message);
-        })
+    Artist.findById(artistId).select(process.env.SUB_DOCUMENT_NAME).exec()
+        .then((Artist) => _checkArtistExists(Artist)
+            .then(() => _setResponse(response, parseInt(process.env.HTTP_STATUS_OK), Artist.paintings.id(paintingId)))
+            .catch(() => _setResponse(response, parseInt(process.env.HTTP_STATUS_NOT_FOUND), { "message": process.env.PAINTINGS_NOT_FOUND }))
+        )
+        .catch((err) => _setResponse(response, parseInt(process.env.HTTP_STATUS_INTERNAL_SERVER_ERROR), { "message": err }))
+        .finally(() => res.status(response.status).json(response.message))
 }
-const _addPaintings = function (req, res, artist) {
-    const painting = {
+
+const _createPainting = function (req) {
+    return {
         name: req.body.name,
         year: parseInt(req.body.year)
-    };
-    artist.paintings.push(painting);
-    const response = { status: parseInt(process.env.HTTP_STATUS_OK), message: [] };
-    artist.save().then((updatedArtist) => {
-        response.status = parseInt(process.env.HTTP_STATUS_CREATED);
-        response.message = updatedArtist.paintings;
-    })
-        .catch((err) => {
-            response.status = parseInt(process.env.HTTP_STATUS_INTERNAL_SERVER_ERROR);
-            response.message = err;
-        })
-        .finally(() => {
-            res.status(response.status).json(response.message);
-        });
+    }
 }
+
+const _addPaintings = function (response, res, artist, req) {
+    const painting = _createPainting(req);
+    artist.paintings.push(painting);
+    response = _createResponse();
+    artist.save()
+        .then((updatedArtist) => {
+            _setResponse(response, parseInt(process.env.HTTP_STATUS_CREATED), updatedArtist.paintings)
+        })
+        .catch((err) => {
+            _setResponse(response, parseInt(process.env.HTTP_STATUS_INTERNAL_SERVER_ERROR), { "message": err })
+        })
+        .finally(() => res.status(response.status).json(response.message));
+}
+
 const addOnePainting = function (req, res) {
     const artistId = req.params.artistId;
-    const response = { status: parseInt(process.env.HTTP_STATUS_OK), message: [] };
-    Artist.findById(artistId).select(process.env.SUB_DOCUMENT_NAME).exec().then((artist) => {
-        if (!artist) {
-            console.log(process.env.ERROR_MESSAGE_ARTIST);
-            response.status = parseInt(process.env.HTTP_STATUS_NOT_FOUND);
-            response.message = { [_responseMessage]: process.env.ARTIST_ID_NOTFOUND_MESSAGE + artistId };
-            res.status(response.status).json(response.message);
-        }
-        else {
-            _addPaintings(req, res, artist);
-        }
-    })
+    const response = _createResponse();
+    Artist.findById(artistId).select(process.env.SUB_DOCUMENT_NAME).exec()
+
+        .then((artist) => _checkArtistExists(artist)
+            .then(() => _addPaintings(response, res, artist, req))
+            .catch(() => {
+                _setResponse(response, parseInt(process.env.HTTP_STATUS_NOT_FOUND), { [_responseMessage]: process.env.ARTIST_ID_NOTFOUND_MESSAGE + " " + artistId })
+                res.status(response.status).json(response.message);
+            }))
         .catch((err) => {
-            response.status = parseInt(process.env.HTTP_STATUS_INTERNAL_SERVER_ERROR);
-            response.message = err;
+            _setResponse(response, parseInt(process.env.HTTP_STATUS_INTERNAL_SERVER_ERROR), { "message": err })
             res.status(response.status).json(response.message);
         });
 }
-const _deletePainting = function (req, res, artist) {
+const _blankPainting = function (req, artist) {
     const paintingId = req.params.paintingId;
     var paintings = [];
     paintings = artist.paintings;
@@ -138,42 +130,30 @@ const _deletePainting = function (req, res, artist) {
         }
     })
     artist.paintings = paintings;
-    const response = {
-        status: parseInt(process.env.HTTP_STATUS_NO_CONTENT),
-        message: []
-    };
-    artist.save().then((updatedArtist) => {
-        response.status = parseInt(process.env.HTTP_STATUS_CREATED);
-        response.message = updatedArtist.paintings;
-        res.status(response.status).json(response.message);
-    })
-        .catch(
-            (err) => {
-                response.status = parseInt(process.env.HTTP_STATUS_INTERNAL_SERVER_ERROR);
-                response.message = err;
-            })
+    return artist;
+}
+const _deletePainting = function (req, res, artist) {
+    artist = _blankPainting(req, artist)
+    const response = _createResponse();
+    artist.save()
+        .then((updatedArtist) => _setResponse(response, parseInt(process.env.HTTP_STATUS_CREATED), updatedArtist.paintings))
+        .catch((err) => _setResponse(response, parseInt(process.env.HTTP_STATUS_INTERNAL_SERVER_ERROR), { "message": err }))
         .finally(res.status(response.status).json(response.message));
 }
 
 const deleteOnePainting = function (req, res) {
     const artistId = req.params.artistId;
-    const response = { status: parseInt(process.env.HTTP_STATUS_OK), message: [] };
-    Artist.findById(artistId).select(process.env.SUB_DOCUMENT_NAME).exec().then((artist) => {
-        if (!artist) {
-            console.log(process.env.ERROR_MESSAGE_ARTIST);
-            response.status = parseInt(process.env.HTTP_STATUS_NOT_FOUND);
-            response.message = { [_responseMessage]: process.env.ARTIST_ID_NOTFOUND_MESSAGE + artistId };
-            res.status(response.status).json(response.message);
-        }
-        else {
-            _deletePainting(req, res, artist);
-        }
-    })
+    const response = _createResponse();
+    Artist.findById(artistId).select(process.env.SUB_DOCUMENT_NAME).exec()
+        .then((artist) => _checkArtistExists(artist)
+            .then(() => _deletePainting(req, res, artist))
+            .catch(() => {
+                _setResponse(response, parseInt(process.env.HTTP_STATUS_NOT_FOUND), { [_responseMessage]: process.env.ARTIST_ID_NOTFOUND_MESSAGE + " " + artistId })
+                res.status(response.status).json(response.message);
+            }))
         .catch((err) => {
-
             console.log(process.env.ERROR_MESSAGE_ARTIST);
-            response.status = parseInt(process.env.HTTP_STATUS_INTERNAL_SERVER_ERROR);
-            response.message = err;
+            _setResponse(response, parseInt(process.env.HTTP_STATUS_INTERNAL_SERVER_ERROR), { "message": err })
             res.status(response.status).json(response.message);
         });
 }
@@ -199,64 +179,54 @@ const _UpdatePainting = function (req, res, artist, _paintingFillCallback) {
         }
     })
     artist.paintings = paintings;
-    const response = {
-        status: parseInt(process.env.HTTP_STATUS_NO_CONTENT),
-        message: []
-    };
+    const response = _createResponse();
     artist.save().then((updatedArtist) => {
         let returnMessage = updatedArtist.paintings.filter((painting) => painting.id === req.params.paintingId);
         if (undefined !== returnMessage && null !== returnMessage) {
-            response.status = parseInt(process.env.HTTP_STATUS_CREATED);
-            response.message = returnMessage;
+            _setResponse(response, parseInt(process.env.HTTP_STATUS_CREATED), returnMessage)
         }
         else {
-            throw ("Error")
+            throw (process.env.ERROR)
         }
     })
         .catch((err) => {
-            response.status = parseInt(process.env.HTTP_STATUS_INTERNAL_SERVER_ERROR);
-            response.message = err;
+            _setResponse(response, parseInt(process.env.HTTP_STATUS_INTERNAL_SERVER_ERROR), { "message": err })
         })
         .finally(() => {
-
             res.status(response.status).json(response.message);
         });
 
 }
 const paintingPartialUpdateOne = function (req, res) {
     const artistId = req.params.artistId;
-    const response = { status: parseInt(process.env.HTTP_STATUS_NOT_FOUND), message: process.env.ARTIST_ID_NOTFOUND_MESSAGE + artistId };
-    Artist.findById(artistId).select(process.env.SUB_DOCUMENT_NAME).exec().then((artist) => {
-        if (artist) {
-            _UpdatePainting(req, res, artist, (painting, req) => _paintingFillPartial(painting, req));
-        } else {
-            console.log(process.env.ARTIST_ID_NOTFOUND_MESSAGE);
-            res.status(response.status).json(response.message);
-        }
-    })
+    const response = _createResponse();;
+    Artist.findById(artistId).select(process.env.SUB_DOCUMENT_NAME).exec()
+        .then((artist) => _checkArtistExists(artist)
+            .then(() => _UpdatePainting(req, res, artist, (painting, req) => _paintingFillPartial(painting, req)))
+            .catch(() => {
+                _setResponse(response, parseInt(process.env.HTTP_STATUS_NOT_FOUND), { [_responseMessage]: process.env.ARTIST_ID_NOTFOUND_MESSAGE + " " + artistId })
+                res.status(response.status).json(response.message);
+            }))
         .catch((err) => {
             console.log(process.env.ERROR_MESSAGE_ARTIST);
-            response.status = parseInt(process.env.HTTP_STATUS_INTERNAL_SERVER_ERROR);
-            response.message = err;
+            _setResponse(response, parseInt(process.env.HTTP_STATUS_INTERNAL_SERVER_ERROR), { "message": err })
             res.status(response.status).json(response.message);
         });
 
 }
 const paintingFullyUpdateOne = function (req, res) {
     const artistId = req.params.artistId;
-    const response = { status: parseInt(process.env.HTTP_STATUS_NOT_FOUND), message: process.env.ARTIST_ID_NOTFOUND_MESSAGE + artistId };
-    Artist.findById(artistId).select(process.env.SUB_DOCUMENT_NAME).exec().then((artist) => {
-        if (artist) {
-            _UpdatePainting(req, res, artist, (painting, req) => _paintingFillFull(painting, req));
-        } else {
-            console.log(process.env.ARTIST_ID_NOTFOUND_MESSAGE);
-            res.status(response.status).json(response.message);
-        }
-    })
+    const response = _createResponse();
+    Artist.findById(artistId).select(process.env.SUB_DOCUMENT_NAME).exec()
+        .then((artist) => _checkArtistExists(artist)
+            .then(() => _UpdatePainting(req, res, artist, (painting, req) => _paintingFillFull(painting, req)))
+            .catch(() => {
+                _setResponse(response, parseInt(process.env.HTTP_STATUS_NOT_FOUND), { [_responseMessage]: process.env.ARTIST_ID_NOTFOUND_MESSAGE + " " + artistId })
+                res.status(response.status).json(response.message);
+            }))
         .catch((err) => {
             console.log(process.env.ERROR_MESSAGE_ARTIST);
-            response.status = parseInt(process.env.HTTP_STATUS_INTERNAL_SERVER_ERROR);
-            response.message = err;
+            _setResponse(response, parseInt(process.env.HTTP_STATUS_INTERNAL_SERVER_ERROR), { "message": err })
             res.status(response.status).json(response.message);
         })
 

@@ -1,9 +1,3 @@
-// import { Injectable } from '@angular/core';
-
-// @Injectable({
-//   providedIn: 'root'
-// })
-
 export class Painting {
   #_id!: string;
   #name!: string;
@@ -22,8 +16,4 @@ export class Painting {
     this.#year = year;
 
   }
-}
-export class PaintingService {
-
-  constructor() { }
 }

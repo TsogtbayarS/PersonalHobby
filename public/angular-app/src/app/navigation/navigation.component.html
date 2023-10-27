@@ -1,4 +1,12 @@
 <nav class="navigation">
   <button (click)="onHome()" class="nav-button">Home</button>
-  <button routerLink="/artists" class="nav-button">Artists</button>
+  <!-- <button routerLink="/artists" class="nav-button">Artists</button> -->
+  <div *ngIf="isLoggedIn">
+    <button routerLink="/new-artist" class="nav-button">Add Artist</button>
+    <button routerLink="/login" class="nav-button">Profile</button>
+  </div>
+  <div *ngIf="!isLoggedIn">
+    <button routerLink="/register" class="nav-button">Register</button>
+    <button routerLink="/login" class="nav-button">Login</button>
+  </div>
 </nav>

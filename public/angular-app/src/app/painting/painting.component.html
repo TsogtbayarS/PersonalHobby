@@ -1,2 +1,7 @@
 <h1 class="painting-name">{{ painting.name }}</h1>
 <p class="painting-year">Year: {{ painting.year }}</p>
+<button *ngIf="isLoggedIn" (click)="deletePainting(artistId, painting._id)">
+  Delete
+</button>
+&nbsp;
+<button (click)="backToArtist()">Back</button>

@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { UserDataService } from '../user-data.service';
+import { environment } from 'src/environments/environment.development';
 
 @Component({
   selector: 'app-navigation',
@@ -7,12 +9,18 @@ import { Router } from '@angular/router';
   styleUrls: ['./navigation.component.css']
 })
 export class NavigationComponent {
-  constructor(private _router: Router) { }
+  constructor(private _router: Router, private userService: UserDataService) {
+  }
+
+  get isLoggedIn() {
+    return this.userService.isLoggedIn;
+  }
+
   onHome(): void {
-    this._router.navigate(['']);
+    this._router.navigate([environment.rootUrl]);
   }
   onArtists(): void {
-    this._router.navigate(['artists']);
+    this._router.navigate([environment.artists]);
   }
 
 }

@@ -1,0 +1,14 @@
+<form #paintingForm="ngForm" (ngSubmit)="onSubmit(paintingForm)" class="painting-form">
+  <div class="form-group">
+    <label for="name">Painting Name: </label>
+    <input type="text" name="name" [ngModel] class="form-control" />
+  </div>
+  <div class="form-group">
+    <label for="year">Painting Year: </label>
+    <input type="number" name="year" [ngModel] class="form-control" />
+  </div>
+  <button type="submit" class="submit-button">Add</button>
+</form>
+
+<br>
+<button (click)="goBack()" class="back-button">Back</button>

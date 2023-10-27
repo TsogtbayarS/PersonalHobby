@@ -1,22 +1,14 @@
 const express = require('express');
 require('dotenv').config();
-const artistsController = require("../controllers/artists.controller")
-const paintingsController = require("../controllers/paintings.controller")
+
+const userRoute = require("./users.routes")
+const artistsRoute = require("./artists.routes")
+const paintingsRoute = require("./paintings.routes")
 
 const router = express.Router();
 
-router.route(process.env.ARTIST_URL).get(artistsController.artistsGetAll)
-    .post(artistsController.artistsAddOne);
-router.route(process.env.ARTIST_URL + process.env.ARTIST_URL_ID).get(artistsController.artistsGetOne)
-    .put(artistsController.artistsFullyUpdateOne)
-    .patch(artistsController.artistsPartialUpdateOne)
-    .delete(artistsController.artistsDeleteOne);
-router.route(process.env.ARTIST_URL+process.env.ARTIST_URL_ID+process.env.PAINTINGS_URL).get(paintingsController.getAllPaintings)
-    .post(paintingsController.addOnePainting);
-
-router.route(process.env.ARTIST_URL+process.env.ARTIST_URL_ID+process.env.PAINTINGS_URL+process.env.PAINTINGS_URL_ID).get(paintingsController.getOnePainting)
-    .put(paintingsController.paintingFullyUpdateOne)
-    .patch(paintingsController.paintingPartialUpdateOne)
-    .delete(paintingsController.deleteOnePainting);
+router.use(process.env.ARTIST_URL, artistsRoute)
+router.use(process.env.ARTIST_URL, paintingsRoute)
+router.use(process.env.USER_URL, userRoute)
 
 module.exports = router;

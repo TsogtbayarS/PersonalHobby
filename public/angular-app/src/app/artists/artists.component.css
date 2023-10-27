@@ -1,18 +1,31 @@
 .artist-list {
-    list-style: none;
-    padding: 0;
-  }
-  
-  .artist-list li {
-    margin-bottom: 10px;
-  }
-  
-  .artist-link {
-    text-decoration: none;
-    color: #3498db;
-  }
-  
-  .artist-link:hover {
-    text-decoration: underline;
-  }
-  
+  list-style: none;
+  padding: 0;
+}
+
+.artist-list li {
+  margin-bottom: 10px;
+}
+
+.artist-link {
+  text-decoration: none;
+  color: #3498db;
+}
+
+.artist-link:hover {
+  text-decoration: underline;
+}
+.artist-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.edit-button {
+  margin-left: 10px;
+}
+h1 {
+  font-size: 2em;
+  text-align: center;
+  color: #3498db; 
+}

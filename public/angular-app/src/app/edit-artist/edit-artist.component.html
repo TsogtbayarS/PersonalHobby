@@ -1,0 +1,14 @@
+<form [formGroup]="artistForm" (ngSubmit)="onSubmit()" class="artist-form">
+  <div class="form-group">
+    <label for="name">Artist Name:</label>
+    <input type="text" id="name" formControlName="name" />
+  </div>
+  <div class="form-group">
+    <label for="country">Artist Country:</label>
+    <input type="text" id="country" formControlName="country" />
+  </div>
+  <button type="submit" class="submit-button">Save Changes</button>
+</form>
+
+<br />
+<button (click)="goBack()" class="back-button">Back</button>

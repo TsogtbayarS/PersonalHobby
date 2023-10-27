@@ -2,7 +2,7 @@
 	"_id": {
 		"$oid": "6521c3dd8bf2896f24a78e75"
 	},
-	"name": "Vincent van GogH",
+	"name": "Vincent van Gogh",
 	"country": "Netherlands",
 	"paintings": [
 		{
@@ -45,43 +45,6 @@
 		}
 	],
 	"__v": 0
-},
-{
-	"_id": {
-		"$oid": "65231673ba54b2e7002a8f8f"
-	},
-	"name": "Test",
-	"year": 2023,
-	"paintings": [
-		{
-			"name": "NoName",
-			"year": 0,
-			"_id": {
-				"$oid": "652318247e71bd668f94a208"
-			}
-		},
-		{
-			"name": "NoName",
-			"year": 0,
-			"_id": {
-				"$oid": "65231a442cabb59fd57ab557"
-			}
-		},
-		{
-			"name": "The Kiss2",
-			"year": 19072,
-			"_id": {
-				"$oid": "65231b4b8f1a2e01fa271613"
-			}
-		},
-		{
-			"name": "The Kiss2",
-			"year": 19072,
-			"_id": {
-				"$oid": "65231b66c681d0b9bd0c3014"
-			}
-		}
-	]
 },
 {
 	"_id": {

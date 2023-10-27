@@ -2,9 +2,31 @@
 <p class="artist-country">Country: {{ artist.country }}</p>
 
 <ul class="paintings-list">
-  <li *ngFor="let painting of artist.paintings">
-    <a routerLink="/artists/{{ artist._id }}/paintings/{{ painting._id }}" class="painting-link">
-      {{ painting.name }}
-    </a>
+  <li *ngFor="let painting of artist.paintings" class="painting-item">
+    <div *ngIf="'NoName' !== painting.name">
+      <div class="painting-row">
+        <a
+          routerLink="/artists/{{ artist._id }}/paintings/{{ painting._id }}"
+          class="painting-link"
+        >
+          {{ painting.name }}
+        </a>
+        <button
+          *ngIf="isLoggedIn"
+          routerLink="/artists/{{ artist._id }}/paintings/{{ painting._id }}/edit"
+          class="edit-button"
+        >
+          Edit
+        </button>
+      </div>
+    </div>
   </li>
 </ul>
+<div *ngIf="isLoggedIn" class="button-row">
+  <button routerLink="/artists/{{ artist._id }}/new-painting" class="add-button">
+    Add Painting
+  </button>
+  <button (click)="deleteArtist()" class="delete-button">Delete Artist</button>
+</div>
+<br />
+<button (click)="goBack()" class="back-button">Back</button>

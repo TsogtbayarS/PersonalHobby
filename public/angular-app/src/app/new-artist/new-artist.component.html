@@ -1,0 +1,14 @@
+<form #artistForm="ngForm" (ngSubmit)="onSubmit(artistForm)" class="artist-form">
+  <div class="form-group">
+    <label for="name">Artist Name: </label>
+    <input type="text" name="name" [ngModel] class="form-control" />
+  </div>
+  <div class="form-group">
+    <label for="country">Artist Country: </label>
+    <input type="text" name="country" [ngModel] class="form-control" />
+  </div>
+  <button type="submit" class="submit-button">Add</button>
+</form>
+
+<br />
+<button (click)="goBack()" class="back-button">Back</button>

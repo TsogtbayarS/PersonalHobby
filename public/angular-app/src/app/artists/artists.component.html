@@ -1,7 +1,12 @@
+<h1 class="welcome-heading">Welcome to 
+  <br> Artist and Artworks</h1>
 <ul class="artist-list">
-  <li *ngFor="let artist of artists">
+  <li *ngFor="let artist of artists" class="artist-item">
     <a routerLink="/artists/{{ artist._id }}" class="artist-link">
       {{ artist.name }}
     </a>
+    <button *ngIf="isLoggedIn" routerLink="/artists/{{ artist._id }}/edit" class="edit-button">
+      Edit
+    </button>
   </li>
 </ul>
